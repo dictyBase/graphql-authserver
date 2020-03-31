@@ -3,6 +3,7 @@ package middleware
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -27,13 +28,19 @@ func AuthorizeMiddleware(h http.Handler) http.Handler {
 		for _, m := range allowedMutations {
 			if strings.Contains(params.OperationName, m) {
 				fmt.Printf("got %s mutation, no token necessary \n", params.OperationName)
-				w.Write([]byte("passthrough for allowed mutation"))
+				_, err := w.Write([]byte("passthrough for allowed mutation"))
+				if err != nil {
+					log.Println("write error")
+				}
 				return
 			}
 		}
 		// verify request is not a mutation
 		if !strings.Contains(params.Query, "mutation") {
-			w.Write([]byte("passthrough for non-mutation request"))
+			_, err := w.Write([]byte("passthrough for non-mutation request"))
+			if err != nil {
+				log.Println("write error")
+			}
 			return
 		}
 		h.ServeHTTP(w, r)

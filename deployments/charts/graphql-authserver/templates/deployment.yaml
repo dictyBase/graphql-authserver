@@ -43,10 +43,12 @@ spec:
             - name: {{ .Values.service.name }}
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            httpGet:
+              path: "{{ .Values.healthCheck.path }}"
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.healthCheck.delay }}
+            periodSeconds: {{ .Values.healthCheck.period }}
           # readinessProbe:
           #   httpGet:
           #     path: /

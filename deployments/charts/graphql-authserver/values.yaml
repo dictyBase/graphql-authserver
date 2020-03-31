@@ -15,6 +15,13 @@ service:
 
 # Level of log
 logLevel: debug
+
+healthCheck:
+  # configure liveness probes for container
+  path: "/healthz"
+  delay: 15
+  period: 50
+
 resources:
   {}
   # We usually recommend not to specify default resources and to leave this as a conscious

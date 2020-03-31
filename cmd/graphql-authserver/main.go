@@ -32,13 +32,15 @@ func main() {
 			Action: server.RunServer,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:     "private, pr",
-					Usage:    "output file name for private key",
+					Name:     "public-key, pkey",
+					Usage:    "public key file for verifying jwt",
+					EnvVar:   "JWT_PUBLIC_KEY",
 					Required: true,
 				},
 				cli.StringFlag{
-					Name:     "public, pub",
-					Usage:    "output file name for public key",
+					Name:     "private-key, prkey",
+					Usage:    "private key file for signing jwt",
+					EnvVar:   "JWT_PRIVATE_KEY",
 					Required: true,
 				},
 				cli.IntFlag{

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "graphql-authserver.fullname" . }}
+  labels:
+    app: {{ template "graphql-authserver.fullname" . }}
+    chart: {{ template "graphql-authserver.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "graphql-authserver.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "graphql-authserver.fullname" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [
+            "--log-level",
+            "{{ .Values.logLevel }}",
+            "start-server",
+            "--port",
+            "{{ .Values.service.port }}"            
+          ]
+          env:
+          - name: JWT_PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: dictybase-configuration
+                key: auth.publickey
+          - name: JWT_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: dictybase-configuration
+                key: auth.privatekey
+          ports:
+            - name: {{ .Values.service.name }}
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

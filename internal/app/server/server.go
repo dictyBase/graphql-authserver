@@ -9,7 +9,6 @@ import (
 	"os"
 
 	loggerMw "github.com/dictyBase/go-middlewares/middlewares/logrus"
-	"gopkg.in/urfave/cli.v1"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dictyBase/graphql-authserver/internal/handlers"
@@ -18,6 +17,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
+	"github.com/urfave/cli"
 )
 
 // Runs the http server

@@ -9,7 +9,7 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  name: graphql-authserver
+  name: gql-authserver
   type: NodePort
   port: 9539
 

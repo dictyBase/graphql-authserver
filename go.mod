@@ -11,7 +11,7 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/sirupsen/logrus v1.5.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
-	github.com/urfave/cli v1.22.3
+	github.com/urfave/cli v1.22.4
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect

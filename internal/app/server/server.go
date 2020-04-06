@@ -32,8 +32,10 @@ func RunServer(c *cli.Context) error {
 	}
 	cors := cors.New(cors.Options{
 		AllowedOrigins:     []string{"*"},
+		AllowedMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowCredentials:   true,
 		OptionsPassthrough: true,
+		AllowedHeaders:     []string{"*"},
 	})
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)

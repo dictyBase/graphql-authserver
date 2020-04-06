@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -16,16 +17,18 @@ func AuthorizeMiddleware(h http.Handler) http.Handler {
 			)
 			return
 		}
-		if hdr.Get("X-Original-Method") == "OPTIONS" {
-			w.Write([]byte("passthrough for POST method"))
-			return
-		}
-		if hdr.Get("X-Original-Method") == "GET" {
-			w.Write([]byte("passthrough for GET method"))
+		if hdr.Get("X-Original-Method") == "OPTIONS" || hdr.Get("X-Original-Method") == "GET" {
+			_, err := w.Write([]byte("passthrough for non-POST method"))
+			if err != nil {
+				log.Println("write error")
+			}
 			return
 		}
 		if hdr.Get("X-GraphQL-Method") == "Query" {
-			w.Write([]byte("passthrough for GraphQL query"))
+			_, err := w.Write([]byte("passthrough for GraphQL query"))
+			if err != nil {
+				log.Println("write error")
+			}
 			return
 		}
 		h.ServeHTTP(w, r)

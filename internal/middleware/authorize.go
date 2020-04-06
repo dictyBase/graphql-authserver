@@ -1,46 +1,31 @@
 package middleware
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"strings"
 )
-
-type Params struct {
-	OperationName string                 `json:"operationName"`
-	Query         string                 `json:"query"`
-	Variables     map[string]interface{} `json:"variables"`
-}
 
 func AuthorizeMiddleware(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		allowedMutations := []string{"CreateOrder", "Login"}
-		var params Params
-		// decode request body into struct, return 400 status code if error
-		err := json.NewDecoder(r.Body).Decode(&params)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+		hdr := r.Header
+		if hdr.Get("X-Scheme") != "https" {
+			http.Error(
+				w,
+				fmt.Sprintf("scheme is %s not https", hdr.Get("X-Schema")),
+				http.StatusBadRequest,
+			)
 			return
 		}
-		// let slice of allowed mutations pass through
-		for _, m := range allowedMutations {
-			if strings.Contains(params.OperationName, m) {
-				fmt.Printf("got %s mutation, no token necessary \n", params.OperationName)
-				_, err := w.Write([]byte("passthrough for allowed mutation"))
-				if err != nil {
-					log.Println("write error")
-				}
-				return
-			}
+		if hdr.Get("X-Original-Method") == "OPTIONS" {
+			w.Write([]byte("passthrough for POST method"))
+			return
 		}
-		// verify request is not a mutation
-		if !strings.Contains(params.Query, "mutation") {
-			_, err := w.Write([]byte("passthrough for non-mutation request"))
-			if err != nil {
-				log.Println("write error")
-			}
+		if hdr.Get("X-Original-Method") == "GET" {
+			w.Write([]byte("passthrough for GET method"))
+			return
+		}
+		if hdr.Get("X-GraphQL-Method") == "Query" {
+			w.Write([]byte("passthrough for GraphQL query"))
 			return
 		}
 		h.ServeHTTP(w, r)

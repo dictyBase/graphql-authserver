@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dictyBase/go-middlewares v0.0.0-20180704154106-0fd6848b3e92
-	github.com/go-chi/chi v4.1.0+incompatible
+	github.com/go-chi/chi v4.1.1+incompatible
 	github.com/go-chi/cors v1.0.1
 	github.com/go-chi/jwtauth v4.0.4+incompatible
 	github.com/kr/pretty v0.1.0 // indirect

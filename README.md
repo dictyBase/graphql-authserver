@@ -63,7 +63,3 @@ OPTIONS:
    --port value, -p value       server port (default: 9099)
 ```
 
-## Active Developers
-
-<a href="https://sourcerer.io/cybersiddhu"><img src="https://sourcerer.io/assets/avatar/cybersiddhu" height="80px" alt="Sourcerer"></a>
-<a href="https://sourcerer.io/wildlifehexagon"><img src="https://sourcerer.io/assets/avatar/wildlifehexagon" height="80px" alt="Sourcerer"></a>
